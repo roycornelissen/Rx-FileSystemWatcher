@@ -11,7 +11,7 @@
 	public class ObservableFileSystemWatcherTests : FileIntegrationTestsBase
 	{
 		[Test]
-		[Timeout(2000)]
+		[MaxTime(2000)]
 		public async Task WriteToFile_StreamsChanged()
 		{
 			using (var watcher = new ObservableFileSystemWatcher(c => { c.Path = TempPath; }))
@@ -22,13 +22,13 @@
 				File.WriteAllText(Path.Combine(TempPath, "Changed.Txt"), "foo");
 
 				var changed = await firstChanged;
-				Expect(changed.ChangeType, Is.EqualTo(WatcherChangeTypes.Changed));
-				Expect(changed.Name, Is.EqualTo("Changed.Txt"));
+                Assert.That(changed.ChangeType, Is.EqualTo(WatcherChangeTypes.Changed));
+                Assert.That(changed.Name, Is.EqualTo("Changed.Txt"));
 			}
 		}
 
 		[Test]
-		[Timeout(2000)]
+		[MaxTime(2000)]
 		public async Task CreateFile_StreamsCreated()
 		{
 			using (var watcher = new ObservableFileSystemWatcher(c => { c.Path = TempPath; }))
@@ -40,13 +40,13 @@
 				File.WriteAllText(filePath, "foo");
 
 				var created = await firstCreated;
-				Expect(created.ChangeType, Is.EqualTo(WatcherChangeTypes.Created));
-				Expect(created.Name, Is.EqualTo("Created.Txt"));
+                Assert.That(created.ChangeType, Is.EqualTo(WatcherChangeTypes.Created));
+                Assert.That(created.Name, Is.EqualTo("Created.Txt"));
 			}
 		}
 
 		[Test]
-		[Timeout(2000)]
+		[MaxTime(2000)]
 		public async Task DeleteFile_StreamsDeleted()
 		{
 			using (var watcher = new ObservableFileSystemWatcher(c => { c.Path = TempPath; }))
@@ -59,13 +59,13 @@
 				File.Delete(filePath);
 
 				var deleted = await firstDeleted;
-				Expect(deleted.ChangeType, Is.EqualTo(WatcherChangeTypes.Deleted));
-				Expect(deleted.Name, Is.EqualTo("ToDelete.Txt"));
+                Assert.That(deleted.ChangeType, Is.EqualTo(WatcherChangeTypes.Deleted));
+                Assert.That(deleted.Name, Is.EqualTo("ToDelete.Txt"));
 			}
 		}
 
 		[Test]
-		[Timeout(2000)]
+		[MaxTime(2000)]
 		public async Task DeleteMonitoredDirectory_StreamsError()
 		{
 			using (var watcher = new ObservableFileSystemWatcher(c => { c.Path = TempPath; }))
@@ -76,12 +76,12 @@
 				Directory.Delete(TempPath);
 
 				var error = await firstError;
-				Expect(error.GetException().Message, Is.EqualTo("Access is denied"));
+                Assert.That(error.GetException().Message, Is.EqualTo("Access is denied"));
 			}
 		}
 
 		[Test]
-		[Timeout(2000)]
+		[MaxTime(2000)]
 		public async Task RenameFile_StreamsRenamed()
 		{
 			using (var watcher = new ObservableFileSystemWatcher(c => { c.Path = TempPath; }))
@@ -95,8 +95,8 @@
 				File.Move(originalPath, renamedPath);
 
 				var renamed = await firstRenamed;
-				Expect(renamed.OldFullPath, Is.EqualTo(originalPath));
-				Expect(renamed.FullPath, Is.EqualTo(renamedPath));
+                Assert.That(renamed.OldFullPath, Is.EqualTo(originalPath));
+                Assert.That(renamed.FullPath, Is.EqualTo(renamedPath));
 			}
 		}
 	}

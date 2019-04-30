@@ -11,7 +11,7 @@
 	public class FileDropWatcherTests : FileIntegrationTestsBase
 	{
 		[Test]
-		[Timeout(2000)]
+		[MaxTime(2000)]
 		public async Task FileDropped_NoExistingFile_StreamsDropped()
 		{
 			using (var watcher = new FileDropWatcher(TempPath, "Monitored.Txt"))
@@ -23,13 +23,13 @@
 				File.WriteAllText(monitoredFile, "foo");
 
 				var dropped = await firstDropped;
-				Expect(dropped.Name, Is.EqualTo("Monitored.Txt"));
-				Expect(dropped.FullPath, Is.EqualTo(monitoredFile));
+                Assert.That(dropped.Name, Is.EqualTo("Monitored.Txt"));
+                Assert.That(dropped.FullPath, Is.EqualTo(monitoredFile));
 			}
 		}
 
 		[Test]
-		[Timeout(2000)]
+		[MaxTime(2000)]
 		public async Task FileRenamed_NoExistingFile_StreamsDropped()
 		{
 			using (var watcher = new FileDropWatcher(TempPath, "Monitored.Txt"))
@@ -43,13 +43,13 @@
 				File.Move(otherFile, monitoredFile);
 
 				var dropped = await firstDropped;
-				Expect(dropped.Name, Is.EqualTo("Monitored.Txt"));
-				Expect(dropped.FullPath, Is.EqualTo(monitoredFile));
+                Assert.That(dropped.Name, Is.EqualTo("Monitored.Txt"));
+                Assert.That(dropped.FullPath, Is.EqualTo(monitoredFile));
 			}
 		}
 
 		[Test]
-		[Timeout(2000)]
+		[MaxTime(2000)]
 		public async Task Overwrite_ExistingFile_StreamsDropped()
 		{
 			using (var watcher = new FileDropWatcher(TempPath, "Monitored.Txt"))
@@ -62,13 +62,13 @@
 				File.WriteAllText(monitoredFile, "bar");
 
 				var dropped = await firstDropped;
-				Expect(dropped.Name, Is.EqualTo("Monitored.Txt"));
-				Expect(dropped.FullPath, Is.EqualTo(monitoredFile));
+                Assert.That(dropped.Name, Is.EqualTo("Monitored.Txt"));
+                Assert.That(dropped.FullPath, Is.EqualTo(monitoredFile));
 			}
 		}
 
 		[Test]
-		[Timeout(2000)]
+		[MaxTime(2000)]
 		public async Task PollExisting_FileBeforeStart_StreamsDropped()
 		{
 			using (var watcher = new FileDropWatcher(TempPath, "Monitored.Txt"))
@@ -80,13 +80,13 @@
 				watcher.PollExisting();
 
 				var dropped = await firstDropped;
-				Expect(dropped.Name, Is.EqualTo("Monitored.Txt"));
-				Expect(dropped.FullPath, Is.EqualTo(monitoredFile));
+                Assert.That(dropped.Name, Is.EqualTo("Monitored.Txt"));
+                Assert.That(dropped.FullPath, Is.EqualTo(monitoredFile));
 			}
 		}
 
         [Test]
-        [Timeout(2000)]
+        [MaxTime(2000)]
         public async Task PollExisting_SecondTime_StreamsSecondTime()
         {
             using (var watcher = new FileDropWatcher(TempPath, "Monitored.Txt"))
@@ -99,8 +99,8 @@
                 watcher.PollExisting();
 
                 var dropped = await secondDropped;
-                Expect(dropped.Name, Is.EqualTo("Monitored.Txt"));
-                Expect(dropped.FullPath, Is.EqualTo(monitoredFile));
+                Assert.That(dropped.Name, Is.EqualTo("Monitored.Txt"));
+                Assert.That(dropped.FullPath, Is.EqualTo(monitoredFile));
             }
         }
     }

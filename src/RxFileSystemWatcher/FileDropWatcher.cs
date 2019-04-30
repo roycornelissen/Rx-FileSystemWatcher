@@ -6,10 +6,8 @@
 	using System.Reactive.Linq;
 	using System.Reactive.Subjects;
 
-	/// <summary>
-	///     An observable abstraction to monitor for files dropped into a directory
-	/// </summary>
-	public class FileDropWatcher : IDisposable
+    /// <inheritdoc />
+    public class FileDropWatcher : IDisposable, IFileDropWatcher
 	{
 		private readonly string _Path;
 		private readonly string _Filter;
@@ -55,11 +53,7 @@
 			_Watcher.Dispose();
 		}
 
-		/// <summary>
-		///     Use this to scan for files and raise dropped events for any results.
-		///     This is great to use right after starting the watcher to find existing files.
-		///     Existing files will trigger dropped events through the Dropped stream.
-		/// </summary>
+        /// <inheritdoc />
 		public void PollExisting()
 		{
             foreach (var existingFile in Directory.GetFiles(_Path, _Filter))
